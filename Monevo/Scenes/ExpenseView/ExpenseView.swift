@@ -9,36 +9,70 @@ import SwiftUI
 
 struct ExpenseView: View {
 
-    @State private var viewModel = ExpenseViewModel()
+    @State private var vm = ExpenseViewModel()
     @State private var isPresented = false
 
     var body: some View {
-        if viewModel.expenses.isEmpty {
-
-            VStack {
+        NavigationStack {
+            
+            if vm.expenses.isEmpty {
                 Text("Brak wydatków")
-                Button {
-                    isPresented = true
-                } label: {
-                    Label("Dodaj wydatek", systemImage: "plus")
+            } else {
+                List(vm.expenses) {
+                    Text($0.title ?? "unknown")
                 }
             }
-        } else {
-            NavigationStack {
 
+            Button {
+                isPresented = true
+            } label: {
+                VStack {
+                    ZStack {
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 80, height: 80)
+                        Text("+")
+                            .foregroundStyle(.white)
+                            .font(.system(size: 32))
+                    }
+                    .padding()
+                }
             }
-            .sheet(
-                isPresented: $isPresented) {
-                    VStack {
-                        HStack {
-                            Text("Nazwa wydatku")
-                            TextField("Nazwa wydatku", text: $viewModel.title)
+
+        }
+        .searchable(text: $vm.searchKeyword)
+        .onAppear(perform: vm.fetchExpense)
+        .sheet(isPresented: $isPresented) {
+            Form {
+                Section("Wydatek") {
+                    TextField("Nazwa wydatku", text: $vm.title)
+
+                    TextField("0.00", text: $vm.amount)
+                        .keyboardType(.decimalPad)
+
+                    TextField("Notatka", text: $vm.note)
+                }
+
+                Section("Kategoria") {
+                    Picker("Kategorie", selection: $vm.selectedCategory) {
+                        ForEach(vm.categories) { category in
+                            Text(category.title)
+                                .tag(category as CategoryTab?)
                         }
                     }
                 }
-        }
-    }
 
+                Button("Dodaj wydatek") {
+                    vm.save()
+                    vm.fetchExpense()
+                    isPresented = false
+                }
+            }
+        }
+       
+    }
+        
+        
 }
 
 #Preview {
