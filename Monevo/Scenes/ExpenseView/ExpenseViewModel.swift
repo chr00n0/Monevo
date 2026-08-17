@@ -8,11 +8,13 @@
 import Foundation
 import CoreData
 
+
 struct CategoryTab: Identifiable {
     var id = UUID()
     var title: String
 }
 
+@Observable
 final class ExpenseViewModel {
     var title = ""
     var amount = ""

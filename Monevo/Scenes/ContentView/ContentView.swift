@@ -8,9 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
-
+    @State private var selectedTab = "Wydatki"
     var body: some View {
-
+        TabView(selection: $selectedTab) {
+            ExpenseView()
+                .tabItem {
+                    Label("Wydatki", systemImage: "dollarsign.bank.building")
+                }
+            CategoryView()
+                .tabItem {
+                    Label("Kategorie", systemImage: "bag")
+                }
+        }
     }
 }
 
