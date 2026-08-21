@@ -15,7 +15,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("Wydatki", systemImage: "dollarsign.bank.building")
                 }
-            CategoryView()
+            CategoryListView()
                 .tabItem {
                     Label("Kategorie", systemImage: "bag")
                 }
