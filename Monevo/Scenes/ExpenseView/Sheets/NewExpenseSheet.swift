@@ -10,6 +10,7 @@ import SwiftUI
 struct NewExpenseSheet: View {
 
     @State var vm = ExpenseViewModel()
+    var onSave: () -> Void
     
      var body: some View {
         Form {
@@ -30,11 +31,12 @@ struct NewExpenseSheet: View {
                     }
                 }
             }
+            
+            Button("Dodaj wydatek") {
+                onSave()
+            }
         }
  
     }
 }
 
-#Preview {
-    NewExpenseSheet()
-}

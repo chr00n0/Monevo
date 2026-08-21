@@ -22,6 +22,7 @@ final class ExpenseViewModel {
     }
     
     var selectedCategory: CategoryTab = .currentExpenses
+    var selectedExpense: Expense?
     
     private(set) var expenses: [Expense] = []
     private(set) var error: String?

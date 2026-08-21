@@ -14,17 +14,19 @@ struct ExpenseView: View {
 
     var body: some View {
         NavigationStack {
-            
             if vm.expenses.isEmpty {
                 Text("Brak wydatków")
             } else {
-                List(vm.expenses) {
-                    Button($0.title ?? "unknown") {
+                List(vm.expenses) { expense in
+                    Button(expense.title ?? "unknown") {
+                        vm.selectedExpense = expense
                         isPresented = true
                     }
-                }
-                .swipeActions(edge: .leading) {
-                    
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            vm.delete(expense)
+                        }
+                    }
                 }
             }
 
@@ -47,9 +49,21 @@ struct ExpenseView: View {
         }
         .searchable(text: $vm.searchKeyword)
         .onAppear(perform: vm.fetchExpense)
+        .sheet(isPresented: $isPresented) {
+            if let expense = vm.selectedExpense {
+                ExpenseSheet(expense: expense) {
+                    vm.selectedExpense = nil
+                }
+            } else {
+                NewExpenseSheet(vm: vm) {
+                    vm.save()
+                    isPresented = false
+                    vm.fetchExpense()
+                }
+            }
+        }
     }
-        
-        
+
 }
 
 #Preview {

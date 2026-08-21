@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct ExpenseSheet: View {
+    let expense: Expense
+    var onDismiss: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text(expense.title ?? "")
+            Text(String(expense.amount))
+            Text(expense.category ?? "")
+        }
+        .onDisappear(perform: onDismiss)
     }
 }
 
-#Preview {
-    ExpenseSheet()
-}
