@@ -16,6 +16,10 @@ struct ExpenseSheet: View {
             Text(expense.title ?? "")
             Text(String(expense.amount))
             Text(expense.category ?? "")
+            HStack {
+                Text("Notatkta:")
+                Text(expense.note ?? "")
+            }
         }
         .onDisappear(perform: onDismiss)
     }

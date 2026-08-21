@@ -20,7 +20,6 @@ final class ExpenseViewModel {
             fetchExpense()
         }
     }
-    
     var selectedCategory: CategoryTab = .currentExpenses
     var selectedExpense: Expense?
     
