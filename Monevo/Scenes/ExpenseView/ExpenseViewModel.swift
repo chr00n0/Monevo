@@ -10,11 +10,6 @@ import CoreData
 import Observation
 
 
-struct CategoryTab: Identifiable, Hashable {
-    var id = UUID()
-    var title: String
-}
-
 @Observable
 final class ExpenseViewModel {
     var title = ""
@@ -26,19 +21,7 @@ final class ExpenseViewModel {
         }
     }
     
-    private(set) var categories: [CategoryTab] = [
-        CategoryTab(title: "Wydatki bieżące"),
-        CategoryTab(title: "Rozrywka i wypoczynek"),
-        CategoryTab(title: "Transport"),
-        CategoryTab(title: "Rachunki"),
-        CategoryTab(title: "Odzież i dodatki"),
-        CategoryTab(title: "Dom"),
-        CategoryTab(title: "Zdrowie"),
-        CategoryTab(title: "Edukacja"),
-        CategoryTab(title: "Wydatki inne")
-    ]
-
-    var selectedCategory: CategoryTab?
+    var selectedCategory: CategoryTab = .currentExpenses
     
     private(set) var expenses: [Expense] = []
     private(set) var error: String?
@@ -59,11 +42,11 @@ final class ExpenseViewModel {
     
     func save() {
         do {
-            let expense = Expense()
+            let expense = Expense(context: context)
             expense.id = UUID()
             expense.title = title
             expense.note = note
-            expense.category = selectedCategory?.title
+            expense.category = selectedCategory.rawValue
             expense.amount = Double(amount) ?? 0.00
             
             try context.save()
@@ -89,7 +72,7 @@ final class ExpenseViewModel {
         title = ""
         amount = ""
         note = ""
-        selectedCategory = nil
+        selectedCategory = .currentExpenses
     }
 
 }

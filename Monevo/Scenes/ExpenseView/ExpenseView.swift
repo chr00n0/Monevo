@@ -19,7 +19,12 @@ struct ExpenseView: View {
                 Text("Brak wydatków")
             } else {
                 List(vm.expenses) {
-                    Text($0.title ?? "unknown")
+                    Button($0.title ?? "unknown") {
+                        isPresented = true
+                    }
+                }
+                .swipeActions(edge: .leading) {
+                    
                 }
             }
 
@@ -42,34 +47,6 @@ struct ExpenseView: View {
         }
         .searchable(text: $vm.searchKeyword)
         .onAppear(perform: vm.fetchExpense)
-        .sheet(isPresented: $isPresented) {
-            Form {
-                Section("Wydatek") {
-                    TextField("Nazwa wydatku", text: $vm.title)
-
-                    TextField("0.00", text: $vm.amount)
-                        .keyboardType(.decimalPad)
-
-                    TextField("Notatka", text: $vm.note)
-                }
-
-                Section("Kategoria") {
-                    Picker("Kategorie", selection: $vm.selectedCategory) {
-                        ForEach(vm.categories) { category in
-                            Text(category.title)
-                                .tag(category as CategoryTab?)
-                        }
-                    }
-                }
-
-                Button("Dodaj wydatek") {
-                    vm.save()
-                    vm.fetchExpense()
-                    isPresented = false
-                }
-            }
-        }
-       
     }
         
         
