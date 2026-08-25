@@ -15,7 +15,7 @@ struct CategoryListView: View {
         NavigationStack {
             List(vm.categories) { categories in
                 NavigationLink {
-                    CategoryView()
+                    CategoryView(category: categories)
                 } label: {
                     Text(categories.rawValue)
                 }

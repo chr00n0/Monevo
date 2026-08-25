@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct NewExpenseSheet: View {
-
-    @State var vm = ExpenseViewModel()
+    @State var vm: ExpenseViewModel
     var onSave: () -> Void
     
-     var body: some View {
+    var body: some View {
         Form {
             Section("Wydatek") {
                 TextField("Nazwa wydatku", text: $vm.title)
@@ -31,12 +30,11 @@ struct NewExpenseSheet: View {
                     }
                 }
             }
-            
+
             Button("Dodaj wydatek") {
                 onSave()
             }
         }
- 
     }
 }
 

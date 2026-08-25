@@ -5,32 +5,38 @@
 //  Created by Emil Piórkowski on 21/08/2026.
 //
 
+import CoreData
 import Foundation
 import Observation
-import CoreData
 
 @Observable
 final class CategoryViewModel {
-    private(set) var listOfExpenses: [Expense] = []
+    private(set) var expenses: [Expense] = []
     private(set) var error: String?
+    private var category: CategoryTab = .currentExpenses
     
     var searchKeyword = "" {
         didSet {
-            fetchCategory()
+            fetchExpenses(for: category)
         }
     }
-    
-    func fetchCategory() {
-        let context = PersistenceController.shared.container.viewContext
+    var selectedExpense: Expense?
+    let context = PersistenceController.shared.container.viewContext
+
+    func fetchExpenses(for category: CategoryTab) {
+        self.category = category
         let request = Expense.fetchRequest()
+        if !searchKeyword.isEmpty {
+            request.predicate = NSPredicate(format: "category == %@ AND title CONTAINS[cd] %@", category.rawValue, searchKeyword)
+        } else {
+            request.predicate = NSPredicate(format: "category == %@", category.rawValue)
+        }
         
         do {
-            if !searchKeyword.isEmpty {
-                request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchKeyword)
-            }
-            listOfExpenses = try context.fetch(request)
+            expenses = try context.fetch(request)
         } catch {
             self.error = error.localizedDescription
         }
     }
+
 }
